@@ -76,6 +76,12 @@ button:hover {
     👁️ Mostrar resultado
 </button>
 
+<br>
+
+<button class="toggle-btn" onclick="resetarVotos()">
+    🗑️ Resetar votos
+</button>
+
 <script>
 let votos = JSON.parse(localStorage.getItem("votos")) || [0,0,0,0,0];
 let visivel = false;
@@ -122,6 +128,17 @@ function toggleResultado() {
     } else {
         botao.innerHTML = "👁️ Mostrar resultado";
     }
+
+    atualizarResultado();
+}
+
+function resetarVotos() {
+    let confirmar = confirm("Tem certeza que deseja apagar todos os votos?");
+
+    if (!confirmar) return;
+
+    votos = [0,0,0,0,0];
+    localStorage.removeItem("votos");
 
     atualizarResultado();
 }
