@@ -45,6 +45,12 @@ button:hover {
     border-radius: 15px;
     display: inline-block;
 }
+
+.toggle-btn {
+    margin-top: 15px;
+    font-size: 18px;
+    padding: 10px 20px;
+}
 </style>
 </head>
 
@@ -61,11 +67,18 @@ button:hover {
 </div>
 
 <div class="resultado" id="resultado">
-    Nenhum voto ainda.
+    Resultado oculto 🔒
 </div>
+
+<br>
+
+<button class="toggle-btn" onclick="toggleResultado()" id="btnToggle">
+    👁️ Mostrar resultado
+</button>
 
 <script>
 let votos = JSON.parse(localStorage.getItem("votos")) || [0,0,0,0,0];
+let visivel = false;
 
 function votar(opcao) {
     votos[opcao]++;
@@ -74,6 +87,11 @@ function votar(opcao) {
 }
 
 function atualizarResultado() {
+    if (!visivel) {
+        document.getElementById("resultado").innerHTML = "Resultado oculto 🔒";
+        return;
+    }
+
     let total = votos.reduce((a, b) => a + b, 0);
 
     if (total === 0) {
@@ -92,6 +110,20 @@ function atualizarResultado() {
         <hr>
         Total: ${total}
     `;
+}
+
+function toggleResultado() {
+    visivel = !visivel;
+
+    let botao = document.getElementById("btnToggle");
+
+    if (visivel) {
+        botao.innerHTML = "🙈 Esconder resultado";
+    } else {
+        botao.innerHTML = "👁️ Mostrar resultado";
+    }
+
+    atualizarResultado();
 }
 
 atualizarResultado();
