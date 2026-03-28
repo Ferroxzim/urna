@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urna de Opinião</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: white;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+button {
+    font-size: 40px;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    background: white;
+}
+
+button:hover {
+    transform: scale(1.2);
+}
+
+.resultado {
+    margin-top: 30px;
+    font-size: 18px;
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 15px;
+    display: inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<h1>O que você achou?</h1>
+
+<div class="container">
+    <button onclick="votar(0)">😡</button>
+    <button onclick="votar(1)">🙁</button>
+    <button onclick="votar(2)">😐</button>
+    <button onclick="votar(3)">🙂</button>
+    <button onclick="votar(4)">😃</button>
+</div>
+
+<div class="resultado" id="resultado">
+    Nenhum voto ainda.
+</div>
+
+<script>
+let votos = JSON.parse(localStorage.getItem("votos")) || [0,0,0,0,0];
+
+function votar(opcao) {
+    votos[opcao]++;
+    localStorage.setItem("votos", JSON.stringify(votos));
+    atualizarResultado();
+}
+
+function atualizarResultado() {
+    let total = votos.reduce((a, b) => a + b, 0);
+
+    if (total === 0) {
+        document.getElementById("resultado").innerHTML = "Nenhum voto ainda.";
+        return;
+    }
+
+    let porcentagens = votos.map(v => ((v / total) * 100).toFixed(1));
+
+    document.getElementById("resultado").innerHTML = `
+        😡 ${porcentagens[0]}% (${votos[0]})<br>
+        🙁 ${porcentagens[1]}% (${votos[1]})<br>
+        😐 ${porcentagens[2]}% (${votos[2]})<br>
+        🙂 ${porcentagens[3]}% (${votos[3]})<br>
+        😃 ${porcentagens[4]}% (${votos[4]})<br>
+        <hr>
+        Total: ${total}
+    `;
+}
+
+atualizarResultado();
+</script>
+
+</body>
+</html>
